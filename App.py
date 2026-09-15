@@ -8,8 +8,8 @@ st.set_page_config(page_title="AI Bet Analyzer", page_icon="🎯", layout="cente
 api_key = st.secrets["GEMINI_API_KEY"]
 genai.configure(api_key=api_key)
 
-# Stabilni a aktualni model
-model = genai.GenerativeModel("gemini-2.5-flash")
+# Model, který po nás Google chce přímo v chybové hlášce
+model = genai.GenerativeModel("gemini-3.6-flash")
 
 st.title("🎯 AI Bet Analyzer & Kalkulacka")
 
