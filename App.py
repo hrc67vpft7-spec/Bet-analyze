@@ -8,38 +8,36 @@ st.set_page_config(page_title="AI Bet Analyzer", page_icon="🎯", layout="cente
 api_key = st.secrets["GEMINI_API_KEY"]
 genai.configure(api_key=api_key)
 
-# Čistý název modelu bez neviditelných znaků
-model = genai.GenerativeModel('gemini-1.5-flash')
+# Zmena na PRO model, ktery 100% funguje
+model = genai.GenerativeModel("gemini-1.5-pro")
 
-st.title("🎯 AI Bet Analyzer & Kalkulačka")
+st.title("🎯 AI Bet Analyzer & Kalkulacka")
 
-uploaded_file = st.file_uploader("Nahraj screenshot kurzů", type=["png", "jpg", "jpeg"])
+uploaded_file = st.file_uploader("Nahraj screenshot kurzu", type=["png", "jpg", "jpeg"])
 
-st.markdown("### 💰 Kalkulačka progrese")
-je_progrese = st.checkbox("Chci dohnat předchozí prohraný tiket")
+st.markdown("### 💰 Kalkulacka progrese")
+je_progrese = st.checkbox("Chci dohnat predchozi prohrany tiket")
 
 v_castka = 0.0
 if je_progrese:
-    v_castka = st.number_input("Zadej očekávanou výhru z minulého tiketu ($):", min_value=0.1, step=1.0, format="%.2f")
+    v_castka = st.number_input("Zadej ocekavanou vyhru z minuleho tiketu ($):", min_value=0.1, step=1.0, format="%.2f")
 
 system_prompt = """
-Jsi profesionální analytik pro sportovní sázení a e-sporty.
-Zahrň analýzu pro všechny sporty i e-gaming.
-1. FILTR VIRTUALŮ: Vyřaď AI simulace a arkádové rychlé režimy.
-2. REÁLNÉ ZÁPASY: Zaměř se na ten s nejjasnějším favoritem.
-3. HLOUBKOVÝ ROZBOR: Zhodnoť formu, Tier týmu, únavu.
-4. VÝBĚR: Vyber POUZE JEDEN tým.
+Jsi profesionalni analytik pro sportovni sazeni.
+1. FILTR VIRTUALU: Vyrad AI simulace a arkadove rezimy.
+2. REALNE ZAPASY: Zamer se na zapas s nejjasnejsim favoritem.
+3. VYBER: Vyber POUZE JEDEN tym.
 
-**Analýza:** [Tvůj detailní textový rozbor]
-**Největší favorit:** [Jméno týmu]
+**Analyza:** [Tvuj rozbor]
+**Nejvetsi favorit:** [Jmeno tymu]
 
 [KURZ_ZACATEK]
 1.55
 [KURZ_KONEC]
 """
 
-if uploaded_file and st.button("Spustit hloubkovou analýzu"):
-    with st.spinner("AI analyzuje zápasy a kurzy..."):
+if uploaded_file and st.button("Spustit hloubkovou analyzu"):
+    with st.spinner("AI analyzuje zapasy a kurzy..."):
         try:
             image = Image.open(uploaded_file)
             response = model.generate_content([system_prompt, image])
@@ -52,14 +50,14 @@ if uploaded_file and st.button("Spustit hloubkovou analýzu"):
             
             if kurz_match:
                 kurz_k = float(kurz_match.group(1))
-                st.success(f"🔍 Načtený kurz pro výpočet: **{kurz_k}**")
+                st.success(f"🔍 Nacteny kurz pro vypocet: **{kurz_k}**")
                 if je_progrese and v_castka > 0:
                     if kurz_k > 1.0:
                         vklad_s = v_castka / (kurz_k - 1)
-                        st.info(f"### 💸 Nutný vklad (S): **{vklad_s:.2f} $**")
+                        st.info(f"### 💸 Nutny vklad (S): **{vklad_s:.2f} $**")
                     else:
-                        st.error("Kurz musí být vyšší než 1.0!")
+                        st.error("Kurz musi byt vyssi nez 1.0!")
             else:
-                st.warning("Nenalezen žádný vhodný kurz.")
+                st.warning("Nenalezen zadny vhodny kurz.")
         except Exception as e:
-            st.error(f"Došlo k chybě: {e}")
+            st.error(f"Doslo k chybe: {e}")
