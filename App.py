@@ -11,7 +11,7 @@ api_key = st.secrets["GEMINI_API_KEY"]
 genai.configure(api_key=api_key)
 
 # Inicializace AI modelu (vybíráme Flash pro rychlost a schopnost číst obrázky)
-model = genai.GenerativeModel('gemini-1.5-flash')
+model = genai.GenerativeModel('gemini-1.5-flash-latest')⁠
 
 st.title("🎯 AI Bet Analyzer & Kalkulačka")
 
