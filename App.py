@@ -20,7 +20,7 @@ uploaded_file = st.file_uploader("Nahraj screenshot kurzů", type=["png", "jpg",
 
 # 2. Nastavení progresivní sázky
 st.markdown("### 💰 Kalkulačka progrese")
-je_progrese = st.checkbox("Chci do hnat předchozí prohraný tiket")
+je_progrese = st.checkbox("Chci dohnat předchozí prohraný tiket")
 
 v_castka = 0.0
 if je_progrese:
