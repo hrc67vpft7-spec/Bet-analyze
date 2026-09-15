@@ -8,8 +8,8 @@ st.set_page_config(page_title="AI Bet Analyzer", page_icon="🎯", layout="cente
 api_key = st.secrets["GEMINI_API_KEY"]
 genai.configure(api_key=api_key)
 
-# Zmena na PRO model, ktery 100% funguje
-model = genai.GenerativeModel("gemini-1.5-pro")
+# Spravny, existujici a plne funkcni model
+model = genai.GenerativeModel("gemini-1.5-pro-latest")
 
 st.title("🎯 AI Bet Analyzer & Kalkulacka")
 
