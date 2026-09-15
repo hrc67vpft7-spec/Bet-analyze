@@ -8,6 +8,9 @@ st.set_page_config(page_title="AI Bet Analyzer", page_icon="🎯", layout="cente
 api_key = st.secrets["GEMINI_API_KEY"]
 genai.configure(api_key=api_key)
 
+# Stabilni a aktualni model
+model = genai.GenerativeModel("gemini-2.5-flash")
+
 st.title("🎯 AI Bet Analyzer & Kalkulacka")
 
 uploaded_file = st.file_uploader("Nahraj screenshot kurzu", type=["png", "jpg", "jpeg"])
@@ -35,21 +38,6 @@ Jsi profesionalni analytik pro sportovni sazeni.
 if uploaded_file and st.button("Spustit hloubkovou analyzu"):
     with st.spinner("AI analyzuje zapasy a kurzy..."):
         try:
-            # AUTOMATICKA DETEKCE MODELU - uz zadny Error 404
-            dostupne_modely = [m.name for m in genai.list_models() if 'generateContent' in m.supported_generation_methods]
-            
-            vybrany_model = dostupne_modely[0] if dostupne_modely else None
-            for m in dostupne_modely:
-                if "flash" in m:
-                    vybrany_model = m
-                    break
-            
-            if not vybrany_model:
-                st.error("Tvuj API klic nema pristup k zadnemu modelu.")
-                st.stop()
-                
-            model = genai.GenerativeModel(vybrany_model)
-            
             image = Image.open(uploaded_file)
             response = model.generate_content([system_prompt, image])
             text_odpovedi = response.text
